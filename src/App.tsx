@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Scroll, Sword, Trophy } from "lucide-react";
 import QuestMap from "./pages/QuestMap";
 import QuestPage from "./pages/QuestPage";
 import type { QuestNode } from "./types/quest";
+import arcaneLogo from "./assets/images/sidebar.png";
+import sidebarBg from "./assets/images/sidebar-bg.png"; // import background
 
 function App() {
   const [page, setPage] = useState<"quests" | "character" | "achievements">("quests");
   const [selectedNode, setSelectedNode] = useState<QuestNode | null>(null);
+  const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number }[]>([]);
 
   // Jika ada node yang dipilih → buka QuestPage
   if (selectedNode) {
@@ -20,13 +23,55 @@ function App() {
     { id: "achievements", label: "Achievements", icon: Trophy },
   ];
 
+  // Generate sparkle particles sidebar
+  useEffect(() => {
+    const temp: typeof particles = [];
+    for (let i = 0; i < 25; i++) {
+      temp.push({
+        id: i,
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: Math.random() * 3 + 2,
+      });
+    }
+    setParticles(temp);
+  }, []);
+
   return (
-    <div className="flex min-h-screen bg-gray-900 text-gray-200">
+    <div className="flex h-screen overflow-hidden bg-gray-900 text-gray-200 relative">
       {/* Sidebar */}
-      <aside className="w-64 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 border-r border-gray-700 p-6 flex flex-col gap-6 shadow-lg">
-        <h1 className="text-3xl font-extrabold text-[var(--color-accent)] mb-6 tracking-wide text-center">
-          ArcaneForge
-        </h1>
+      <aside
+        className="w-64 relative border-r border-gray-700 p-6 flex flex-col gap-6 shadow-xl overflow-hidden"
+        style={{
+          backgroundImage: `url(${sidebarBg})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        {/* Overlay abu-abu 90% */}
+        <div className="absolute inset-0 bg-gray-900/97 pointer-events-none" />
+
+        {/* Sparkle particles */}
+        {particles.map((p) => (
+          <div
+            key={p.id}
+            className="absolute rounded-full bg-white/70 animate-float pointer-events-none"
+            style={{
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              top: `${p.y}%`,
+              left: `${p.x}%`,
+              animationDuration: `${2 + Math.random() * 3}s`,
+            }}
+          />
+        ))}
+
+        {/* Logo */}
+        <img
+          src={arcaneLogo}
+          alt="ArcaneForge Logo"
+          className="mx-auto w-60 h-auto mb-4 z-10 relative"
+        />
 
         {/* Menu Buttons */}
         {menuItems.map(({ id, label, icon: Icon }) => {
@@ -35,13 +80,11 @@ function App() {
             <button
               key={id}
               onClick={() => setPage(id)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-semibold
-                transition-all duration-300
-                ${
-                  active
-                    ? "bg-purple-700 text-white shadow-[0_0_20px_rgba(139,92,246,0.6)] scale-105"
-                    : "hover:bg-purple-600 hover:text-white hover:scale-105"
-                }`}
+              className={`relative z-10 flex items-center gap-3 px-4 py-3 rounded-xl font-semibold transition-all duration-300 ${
+                active
+                  ? "bg-gray-800 text-white shadow-[0_0_15px_rgba(255,255,255,0.2)] scale-105 border-l-4 border-[var(--color-accent)]"
+                  : "hover:bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700 hover:text-white hover:scale-105 hover:shadow-[0_0_15px_rgba(255,255,255,0.15)]"
+              }`}
             >
               <Icon size={20} className={active ? "animate-pulse" : ""} />
               {label}
@@ -49,9 +92,9 @@ function App() {
           );
         })}
       </aside>
-
+      
       {/* Main Content */}
-      <main className="flex-1">
+      <main className="flex-1 overflow-hidden relative">
         {page === "quests" && <QuestMap />}
         {page === "character" && (
           <div className="p-10 text-center text-2xl font-bold">⚔️ Character</div>
@@ -60,6 +103,22 @@ function App() {
           <div className="p-10 text-center text-2xl font-bold">🏆 Achievements</div>
         )}
       </main>
+
+      {/* Animasi particle */}
+      <style>
+        {`
+          @keyframes floatParticle {
+            0% { transform: translateY(0px); opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-15px); opacity: 0; }
+          }
+          .animate-float {
+            animation-name: floatParticle;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+          }
+        `}
+      </style>
     </div>
   );
 }
