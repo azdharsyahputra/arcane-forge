@@ -63,11 +63,6 @@ Game ini menggabungkan elemen **quest system, character progression, inventory, 
 
 🚧 Coming soon (Vercel deployment link) 🚧
 
-## 📷 Screenshots
-
-### Halaman Quest
-![Quest Page](./screenshots/quest-page.png)
-
 ---
 
 ### 📖 License
