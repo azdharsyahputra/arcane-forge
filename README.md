@@ -1,69 +1,74 @@
-# arcane-forge# React + TypeScript + Vite
+# Arcane Forge ⚔️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Arcane Forge adalah **mini RPG web app** berbasis React yang dirancang sebagai proyek portofolio.  
+Game ini menggabungkan elemen **quest system, character progression, inventory, dan achievements** dengan tema dark/fantasy.  
 
-Currently, two official plugins are available:
+## ✨ Fitur Utama
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 📜 **Quest System** – daftar quest, progress tracking, dan completeQuest function.  
+- 🧙 **Character Progression** – EXP, leveling system, dan karakter card.  
+- 🎒 **Inventory System** – item grid dengan slot management.  
+- 🏆 **Achievements** – tracker dan badge system.  
+- 🎲 **Random Events** (stretch goal) – event acak setelah quest.  
+- 🌐 **Multiplayer-lite / Leaderboard** (stretch goal) – peringkat antar user.  
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- ⚛️ [React](https://react.dev/)  
+- 🎨 [Tailwind CSS](https://tailwindcss.com/)  
+- 🧩 [shadcn/ui](https://ui.shadcn.com/)  
+- 🎭 [Framer Motion](https://www.framer.com/motion/) untuk animasi  
+- 📊 (Optional) Firebase / Supabase untuk leaderboard  
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🚀 Instalasi & Menjalankan Project
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+1. Clone repo:
+   ```bash
+   git clone https://github.com/azdharsyahputra/arcane-forge.git
+   cd arcane-forge
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+3. Jalankan di lokal:
+   ```bash
+   npm run dev
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+4. Buka di browser:
+   ```
+   http://localhost:5173
+   ```
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 📌 Roadmap (2 Weeks Plan)
+
+### Minggu 1 – Core System
+- [x] Setup React + Tailwind + shadcn/ui, layout utama (navbar, sidebar, main content), dark/fantasy theme  
+- [x] Quest System  
+- [x] Character Progression  
+- [x] Inventory System  
+- [x] Achievements  
+
+### Minggu 2 – Polish + Stretch Goals
+- [ ] Random Event Generator  
+- [ ] Multiplayer-lite / Leaderboard  
+- [ ] UI polishing (pixel-art/icons, animation, responsive)  
+- [ ] Testing & bug fixing  
+- [ ] Deploy ke Vercel + README GitHub  
+
+## 🎮 Demo
+
+🚧 Coming soon (Vercel deployment link) 🚧
+
+## 📷 Screenshots
+
+### Halaman Quest
+![Quest Page](./screenshots/quest-page.png)
+
+---
+
+### 📖 License
+MIT License © 2025 [Azdhar Syahputra](https://github.com/azdharsyahputra)  
