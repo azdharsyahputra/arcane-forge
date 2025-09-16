@@ -7,3 +7,9 @@ export interface Quest {
   image?: string;
   completed?: boolean;
 }
+
+export interface QuestNode {
+  id: number;
+  title: string;
+  quests: Quest[];
+}
