@@ -25,12 +25,4 @@ export const quests: Quest[] = [
     expReward: 250,
     image: "merchant.jpg",
   },
-  {
-    id: 4,
-    title: "Input Dynamic Revision",
-    description: "get the dynamic checksheet 5r excell file from pak polin and put data into dynamic checksheet 5s",
-    completed: false,
-    expReward: 250,
-    image: "merchant.jpg",
-  },
 ];
