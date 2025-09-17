@@ -2,19 +2,16 @@ import { useState, useEffect } from "react";
 import { Scroll, Sword, Trophy } from "lucide-react";
 import QuestMap from "./pages/QuestMap";
 import QuestPage from "./pages/QuestPage";
-import CharacterPage from "@/pages/CharacterPage";
 import type { QuestNode } from "./types/quest";
-import type { Character } from "@/types/character";
-import { characterData } from "@/data/character";
 import arcaneLogo from "./assets/images/sidebar.png";
 import sidebarBg from "./assets/images/sidebar-bg.png";
+import CharacterPage from "./pages/CharacterPage";
+import { characterData } from "./data/character";
 
 function App() {
   const [page, setPage] = useState<"quests" | "character" | "achievements">("quests");
   const [selectedNode, setSelectedNode] = useState<QuestNode | null>(null);
-  const [character, setCharacter] = useState<Character>(characterData);
   const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number }[]>([]);
-
   // Jika ada node yang dipilih → buka QuestPage
   if (selectedNode) {
     return <QuestPage node={selectedNode} onBack={() => setSelectedNode(null)} />;
@@ -26,7 +23,6 @@ function App() {
     { id: "character", label: "Character", icon: Sword },
     { id: "achievements", label: "Achievements", icon: Trophy },
   ];
-
   // Generate sparkle particles sidebar
   useEffect(() => {
     const temp: typeof particles = [];
@@ -40,7 +36,6 @@ function App() {
     }
     setParticles(temp);
   }, []);
-
   return (
     <div className="flex h-screen overflow-hidden bg-gray-900 text-gray-200 relative">
       {/* Sidebar */}
@@ -53,7 +48,7 @@ function App() {
         }}
       >
         {/* Overlay abu-abu 90% */}
-        <div className="absolute inset-0 bg-gray-900/97 pointer-events-none" />
+        <div className="absolute inset-0 bg-gray-900/95 pointer-events-none" />
         {/* Sparkle particles */}
         {particles.map((p) => (
           <div
@@ -75,7 +70,6 @@ function App() {
           alt="ArcaneForge Logo"
           className="mx-auto w-60 h-auto mb-4 z-10 relative"
         />
-
         {/* Menu Buttons */}
         {menuItems.map(({ id, label, icon: Icon }) => {
           const active = page === id;
@@ -95,11 +89,11 @@ function App() {
           );
         })}
       </aside>
-
+      
       {/* Main Content */}
       <main className="flex-1 overflow-hidden relative">
         {page === "quests" && <QuestMap />}
-        {page === "character" && <CharacterPage character={character} />}
+        {page === "character" && <CharacterPage character={characterData} />}
         {page === "achievements" && (
           <div className="p-10 text-center text-2xl font-bold">🏆 Achievements</div>
         )}
