@@ -1,6 +1,7 @@
 // data/quests.ts
 import type { QuestNode } from "../types/quest";
 import dragonImage from '../assets/images/dragon.jpg';
+import herbImage from '../assets/images/herb.jpg';
 
 export const questNodes: QuestNode[] = [
   {
@@ -21,7 +22,7 @@ export const questNodes: QuestNode[] = [
         description: "Collect 10 healing herbs in the forest.",
         completed: false,
         expReward: 120,
-        image: "herbs.jpg",
+        image: herbImage,
       },
     ],
   },
@@ -165,7 +166,7 @@ export const questNodes: QuestNode[] = [
         description: "Gather rare crystals from the edge of the volcano.",
         completed: false,
         expReward: 350,
-        image: "lava.jpg",
+        image: herbImage,
       },
     ],
   },

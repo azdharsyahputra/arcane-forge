@@ -41,8 +41,7 @@ export default function QuestLog({ quests, onComplete }: QuestLogProps) {
             key={q.id}
             className={`relative flex flex-col w-80 md:w-96 rounded-xl border border-transparent shadow-lg
               transition duration-300 ease-in-out hover:scale-105 hover:shadow-purple-600/50
-              ${q.completed ? "line-through opacity-60" : ""}
-            `}
+              ${q.completed ? "line-through opacity-60" : ""}`}
           >
             {/* Bagian atas: gambar + judul overlay */}
             {q.image && (

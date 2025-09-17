@@ -1,8 +1,10 @@
+// CharacterPage.tsx
 import CharacterCard from "@/assets/components/character/CharacterCard";
 import type { Character } from "@/types/character";
 import { characterData } from "@/data/character";
 import { useEffect, useState } from "react";
 import { Progress } from "@/assets/components/ui/progress";
+import { questNodes as questData } from "@/data/quests";
 
 interface CharacterPageProps {
   character: Character;
@@ -10,9 +12,15 @@ interface CharacterPageProps {
 
 export default function CharacterPage({ character }: CharacterPageProps) {
   const [stars, setStars] = useState<{ id: number; x: number; y: number; size: number; speed: number }[]>([]);
+  const [completedQuests, setCompletedQuests] = useState(0);
+  const [totalQuests, setTotalQuests] = useState(0);
+  const [totalExp, setTotalExp] = useState(0);
+  const [level, setLevel] = useState(character.level);
+  const [expToNextLevel, setExpToNextLevel] = useState(character.expToNextLevel);
+  const [currentLevelExp, setCurrentLevelExp] = useState(0);
 
-  // Generate star particles
   useEffect(() => {
+    // Generate star particles
     const temp: typeof stars = [];
     for (let i = 0; i < 30; i++) {
       temp.push({
@@ -24,14 +32,57 @@ export default function CharacterPage({ character }: CharacterPageProps) {
       });
     }
     setStars(temp);
+
+    // Ambil data quest dari localStorage atau default
+    let allQuests: any[] = [];
+    questData.forEach((node) => {
+      const saved = localStorage.getItem(`node-${node.id}-quests`);
+      const quests = saved ? JSON.parse(saved) : node.quests;
+      allQuests = allQuests.concat(quests);
+    });
+
+    const completed = allQuests.filter(q => q.completed).length;
+    setCompletedQuests(completed);
+    setTotalQuests(allQuests.length);
+
+    const expSum = allQuests
+      .filter(q => q.completed)
+      .reduce((acc, q) => acc + (q.expReward || 0), 0);
+    setTotalExp(expSum);
+
+    // Level calculation: setiap 100 EXP = 1 level (contoh)
+    const calculatedLevel = Math.floor(expSum / 100) + 1;
+    const expForCurrentLevel = expSum % 100; // sisa EXP untuk level ini
+    setLevel(calculatedLevel);
+    setCurrentLevelExp(expForCurrentLevel);
+    setExpToNextLevel(100); // Bisa buat scaling kalau mau level tinggi EXP naik
+
   }, []);
 
-  // RPG-relevant KPI cards
+  const streak = 5;
+
   const kpis = [
-    { label: "Daily Quests", value: "3 / 5", icon: "🗡️", subtitle: "Complete your daily challenges", progress: 60 },
-    { label: "EXP Progress", value: `${character.exp} / ${character.expToNextLevel}`, icon: "⭐", subtitle: "Gain experience to level up", progress: (character.exp / character.expToNextLevel) * 100 },
-    { label: "Inventory Slots", value: "12 / 20", icon: "🎒", subtitle: "Manage your items wisely", progress: (12 / 20) * 100 },
-    { label: "Reputation", value: "+2300", icon: "🛡️", subtitle: "Hero points earned from quests", progress: 100 },
+    {
+      label: "Daily Quests",
+      value: `${completedQuests} / ${totalQuests}`,
+      icon: "🗡️",
+      subtitle: "Complete your daily challenges",
+      progress: totalQuests ? (completedQuests / totalQuests) * 100 : 0,
+    },
+    {
+      label: "EXP Progress",
+      value: `${currentLevelExp} / ${expToNextLevel}`,
+      icon: "⭐",
+      subtitle: `Level ${level}`,
+      progress: (currentLevelExp / expToNextLevel) * 100,
+    },
+    {
+      label: "Reputation",
+      value: `${totalExp}`,
+      icon: "🛡️",
+      subtitle: "Total hero points earned",
+      progress: 100,
+    },
   ];
 
   return (
@@ -58,7 +109,7 @@ export default function CharacterPage({ character }: CharacterPageProps) {
           Character Dashboard
         </h1>
         <p className="text-yellow-400 mt-1 max-w-xl">
-          Track your RPG character’s progress, quests, and inventory in one mystical dashboard.
+          Track your RPG character’s progress, quests, and streaks in one mystical dashboard.
         </p>
       </header>
 
@@ -66,7 +117,7 @@ export default function CharacterPage({ character }: CharacterPageProps) {
       <main className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
         {/* Hero Card */}
         <section>
-          <CharacterCard character={character} />
+          <CharacterCard character={{ ...character, level, exp: totalExp }} />
         </section>
 
         {/* KPI Cards */}
@@ -75,12 +126,14 @@ export default function CharacterPage({ character }: CharacterPageProps) {
             <div
               key={kpi.label}
               className="bg-gray-800 rounded-xl shadow-lg border border-yellow-600 p-6 flex flex-col hover:scale-105 transition-transform relative overflow-hidden"
+              style={{ minHeight: "220px" }}
             >
               <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-yellow-400/50 to-yellow-300/50 blur opacity-30 animate-pulse"></div>
 
               <h2 className="text-xl font-semibold mb-2 flex items-center gap-2 relative z-10">
                 <span className="text-yellow-400">{kpi.icon}</span> {kpi.label}
               </h2>
+
               <div className="flex-grow text-yellow-200 text-lg font-bold relative z-10">{kpi.value}</div>
               <small className="text-yellow-400 relative z-10">{kpi.subtitle}</small>
               <div className="relative z-10 mt-3">
@@ -88,27 +141,30 @@ export default function CharacterPage({ character }: CharacterPageProps) {
               </div>
             </div>
           ))}
+
+          {/* Streak Card */}
+          <div
+            className="bg-gray-800 rounded-xl shadow-lg border border-yellow-600 p-6 flex flex-col items-center justify-center hover:scale-105 transition-transform relative overflow-hidden streak-card"
+            style={{ minHeight: "220px" }}
+          >
+            <div className="absolute -inset-0.5 rounded-xl bg-gradient-to-r from-yellow-400/50 to-yellow-300/50 blur opacity-30 animate-pulse"></div>
+
+            <h2 className="text-yellow-400 text-2xl font-semibold mb-4 relative z-10">Daily Streak</h2>
+
+            <span className="text-yellow-400 text-8xl relative z-10 leading-none mb-2" style={{ lineHeight: 1 }}>
+              🔥
+            </span>
+
+            <div className="text-yellow-300 text-xl font-bold relative z-10 mb-2">
+              {streak} days
+            </div>
+
+            <small className="text-yellow-400 text-center relative z-10">Keep your daily streak alive</small>
+          </div>
         </section>
       </main>
 
-      {/* Action Buttons */}
-      {/* <div className="flex gap-4 mt-8 justify-center relative z-10">
-        <button className="bg-yellow-400 px-6 py-2 rounded-xl font-bold shadow-lg hover:scale-105 glow-neon transition-transform">
-          Level Up
-        </button>
-        <button className="bg-gray-700 px-6 py-2 rounded-xl font-bold text-yellow-300 shadow-lg hover:scale-105 glow-neon transition-transform">
-          Equip Item
-        </button>
-        <button className="bg-gray-700 px-6 py-2 rounded-xl font-bold text-yellow-300 shadow-lg hover:scale-105 glow-neon transition-transform">
-          Heal
-        </button>
-      </div> */}
-
-      {/* Glow style + star animation */}
       <style>{`
-        .glow-neon {
-          box-shadow: 0 0 10px rgba(255,255,150,0.7), 0 0 20px rgba(255,255,150,0.5);
-        }
         @keyframes starMove {
           0% { transform: translate(0, 0); opacity: 0.7; }
           50% { opacity: 1; }

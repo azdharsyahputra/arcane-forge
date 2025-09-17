@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Scroll, Sword, Trophy } from "lucide-react";
 import QuestMap from "./pages/QuestMap";
 import QuestPage from "./pages/QuestPage";
+import QuestWorkshopPage from "./pages/QuestWorkshopPage";
 import type { QuestNode } from "./types/quest";
 import arcaneLogo from "./assets/images/sidebar.png";
 import sidebarBg from "./assets/images/sidebar-bg.png";
@@ -9,21 +10,24 @@ import CharacterPage from "./pages/CharacterPage";
 import { characterData } from "./data/character";
 
 function App() {
-  const [page, setPage] = useState<"quests" | "character" | "achievements">("quests");
+  const [page, setPage] = useState<"quests" | "character" | "achievements" | "questWorkshop">("quests");
   const [selectedNode, setSelectedNode] = useState<QuestNode | null>(null);
   const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number }[]>([]);
+
   // Jika ada node yang dipilih → buka QuestPage
   if (selectedNode) {
     return <QuestPage node={selectedNode} onBack={() => setSelectedNode(null)} />;
   }
 
-  // Menu items dengan tipe ketat
-  const menuItems: { id: "quests" | "character" | "achievements"; label: string; icon: typeof Scroll }[] = [
+  // Menu items
+  const menuItems: { id: "quests" | "character" | "achievements" | "questWorkshop"; label: string; icon: typeof Scroll }[] = [
     { id: "quests", label: "Quests", icon: Scroll },
+    { id: "questWorkshop", label: "Quest Workshop", icon: Scroll },
     { id: "character", label: "Character", icon: Sword },
     { id: "achievements", label: "Achievements", icon: Trophy },
   ];
-  // Generate sparkle particles sidebar
+
+  // Sparkle particles sidebar
   useEffect(() => {
     const temp: typeof particles = [];
     for (let i = 0; i < 25; i++) {
@@ -36,6 +40,7 @@ function App() {
     }
     setParticles(temp);
   }, []);
+
   return (
     <div className="flex h-screen overflow-hidden bg-gray-900 text-gray-200 relative">
       {/* Sidebar */}
@@ -47,9 +52,7 @@ function App() {
           backgroundPosition: "center",
         }}
       >
-        {/* Overlay abu-abu 90% */}
-        <div className="absolute inset-0 bg-gray-900/95 pointer-events-none" />
-        {/* Sparkle particles */}
+        <div className="absolute inset-0 bg-gray-900/90 pointer-events-none" />
         {particles.map((p) => (
           <div
             key={p.id}
@@ -64,13 +67,12 @@ function App() {
           />
         ))}
 
-        {/* Logo */}
         <img
           src={arcaneLogo}
           alt="ArcaneForge Logo"
           className="mx-auto w-60 h-auto mb-4 z-10 relative"
         />
-        {/* Menu Buttons */}
+
         {menuItems.map(({ id, label, icon: Icon }) => {
           const active = page === id;
           return (
@@ -89,17 +91,17 @@ function App() {
           );
         })}
       </aside>
-      
+
       {/* Main Content */}
       <main className="flex-1 overflow-hidden relative">
         {page === "quests" && <QuestMap />}
+        {page === "questWorkshop" && <QuestWorkshopPage />}
         {page === "character" && <CharacterPage character={characterData} />}
         {page === "achievements" && (
           <div className="p-10 text-center text-2xl font-bold">🏆 Achievements</div>
         )}
       </main>
 
-      {/* Animasi particle */}
       <style>
         {`
           @keyframes floatParticle {
