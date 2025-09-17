@@ -1,6 +1,6 @@
 import type { Quest } from "../../../types/quest";
-import { Card } from "../ui/card";
-import { Button } from "../ui/button";
+import { Card } from "@/assets/components/ui/card-quest";
+import { Button } from "@/assets/components/ui/button";
 
 interface QuestLogProps {
   quests: Quest[];
