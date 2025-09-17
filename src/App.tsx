@@ -4,7 +4,9 @@ import QuestMap from "./pages/QuestMap";
 import QuestPage from "./pages/QuestPage";
 import type { QuestNode } from "./types/quest";
 import arcaneLogo from "./assets/images/sidebar.png";
-import sidebarBg from "./assets/images/sidebar-bg.png"; // import background
+import sidebarBg from "./assets/images/sidebar-bg.png";
+import CharacterPage from "./pages/CharacterPage";
+import { characterData } from "./data/character";
 
 function App() {
   const [page, setPage] = useState<"quests" | "character" | "achievements">("quests");
@@ -46,7 +48,7 @@ function App() {
         }}
       >
         {/* Overlay abu-abu 90% */}
-        <div className="absolute inset-0 bg-gray-900/97 pointer-events-none" />
+        <div className="absolute inset-0 bg-gray-900/95 pointer-events-none" />
         {/* Sparkle particles */}
         {particles.map((p) => (
           <div
@@ -91,9 +93,7 @@ function App() {
       {/* Main Content */}
       <main className="flex-1 overflow-hidden relative">
         {page === "quests" && <QuestMap />}
-        {page === "character" && (
-          <div className="p-10 text-center text-2xl font-bold">⚔️ Character</div>
-        )}
+        {page === "character" && <CharacterPage character={characterData} />}
         {page === "achievements" && (
           <div className="p-10 text-center text-2xl font-bold">🏆 Achievements</div>
         )}
