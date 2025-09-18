@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@radix-ui/react-progress": "^1.1.7",
     "@shadcn/ui": "^0.0.4",
     "@tailwindcss/vite": "^4.1.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.14",
     "lucide-react": "^0.544.0",
     "path-browserify": "^1.0.1",
     "react": "^19.1.1",

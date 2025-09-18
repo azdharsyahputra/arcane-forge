@@ -66,3 +66,34 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite;
+  mix-blend-mode: screen;
+}
+/* Kustom scrollbar untuk kelas node-list-scrollbar */
+.node-list-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.node-list-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.node-list-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #d97706; /* amber-600 dari Tailwind */
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+/* Styling scrollbar Firefox */
+.node-list-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #d97706 transparent;
+}
