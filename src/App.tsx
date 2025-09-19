@@ -1,28 +1,38 @@
 import { useState, useEffect } from "react";
-import { Scroll, Sword, Trophy } from "lucide-react";
+import { Scroll, Sword, Trophy, MapPin, Hammer, Backpack } from "lucide-react";
 import QuestMap from "./pages/QuestMap";
 import QuestPage from "./pages/QuestPage";
 import QuestWorkshopPage from "./pages/QuestWorkshopPage";
+import CharacterPage from "./pages/CharacterPage";
+import InventoryPage from "./pages/InventoryPage";
 import type { QuestNode } from "./types/quest";
+import { characterData } from "./data/character";
+import { inventoryData } from "./data/inventory";
 import arcaneLogo from "./assets/images/sidebar.png";
 import sidebarBg from "./assets/images/sidebar-bg.png";
-import CharacterPage from "./pages/CharacterPage";
-import { characterData } from "./data/character";
 
 function App() {
-  const [page, setPage] = useState<"quests" | "character" | "achievements" | "questWorkshop">("quests");
+  const [page, setPage] = useState<
+    "quests" | "character" | "achievements" | "questWorkshop" | "inventory"
+  >("quests");
   const [selectedNode, setSelectedNode] = useState<QuestNode | null>(null);
-  const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number }[]>([]);
+  const [particles, setParticles] = useState<
+    { id: number; x: number; y: number; size: number }[]
+  >([]);
 
   // Jika ada node yang dipilih → buka QuestPage
   if (selectedNode) {
     return <QuestPage node={selectedNode} onBack={() => setSelectedNode(null)} />;
   }
 
-  // Menu items
-  const menuItems: { id: "quests" | "character" | "achievements" | "questWorkshop"; label: string; icon: typeof Scroll }[] = [
-    { id: "quests", label: "Quests", icon: Scroll },
-    { id: "questWorkshop", label: "Quest Workshop", icon: Scroll },
+  const menuItems: {
+    id: "quests" | "character" | "achievements" | "questWorkshop" | "inventory";
+    label: string;
+    icon: typeof Scroll;
+  }[] = [
+    { id: "quests", label: "Quests", icon: MapPin },
+    { id: "questWorkshop", label: "Quest Workshop", icon: Hammer },
+    { id: "inventory", label: "Inventory", icon: Backpack },
     { id: "character", label: "Character", icon: Sword },
     { id: "achievements", label: "Achievements", icon: Trophy },
   ];
@@ -93,9 +103,10 @@ function App() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-hidden relative">
+      <main className="flex-1 overflow-auto relative">
         {page === "quests" && <QuestMap />}
         {page === "questWorkshop" && <QuestWorkshopPage />}
+        {page === "inventory" && <InventoryPage items={inventoryData} />}
         {page === "character" && <CharacterPage character={characterData} />}
         {page === "achievements" && (
           <div className="p-10 text-center text-2xl font-bold">🏆 Achievements</div>

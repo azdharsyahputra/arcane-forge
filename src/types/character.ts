@@ -3,17 +3,17 @@ export type Skill = {
   name: string;
   power: number;
 };
-
 export type Character = {
   id: number;
   name: string;
   level: number;
-  exp: number;
-  expToNextLevel: number;
-  totalExp: number;          // total EXP akumulatif
-  completedQuests: number;   // jumlah quest selesai
-  totalQuests: number;       // total quest tersedia
-  streak: number;            // daily streak
-  avatar?: string;
-  skills?: Skill[];          // skill karakter
+  exp: number;             // EXP total saat ini
+  expToNextLevel: number;  // EXP yang dibutuhkan untuk level berikutnya
+  totalExp: number;        // total EXP akumulatif
+  completedQuests: number; // jumlah quest yang sudah selesai
+  totalQuests: number;     // total quest yang ada
+  streak: number;          // daily streak
+  avatar?: string;         // URL gambar avatar
+  skills?: Skill[];        // daftar skill karakter
+  maxHp?: number;          // maksimal HP
 };
