@@ -97,3 +97,11 @@ button:focus-visible {
   scrollbar-width: thin;
   scrollbar-color: #d97706 transparent;
 }
+.scroll-container {
+  -ms-overflow-style: none;  /* Internet Explorer and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}

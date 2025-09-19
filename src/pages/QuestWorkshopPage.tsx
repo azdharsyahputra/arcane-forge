@@ -257,10 +257,7 @@ export default function QuestWorkshopPage() {
                         style={{ clipPath: "polygon(25% 0%, 75% 0%, 100% 30%, 90% 100%, 10% 100%, 0% 30%)" }}
                       >
                         <div className="absolute inset-0 bg-gradient-to-tr from-cyan-200/40 via-transparent to-purple-300/30 rounded-xl animate-pulse pointer-events-none" />
-                        <h2 className="font-extrabold text-xl drop-shadow-md relative z-10">{node.title}</h2>
-                        <p className="text-sm opacity-90 relative z-10">
-                          {node.quests.length} quest{node.quests.length !== 1 ? "s" : ""}
-                        </p>
+                        <h1 className="font-extrabold text-xl drop-shadow-md relative z-10">{node.title}</h1>
                       </motion.div>
 
                       {/* Tombol hapus */}
