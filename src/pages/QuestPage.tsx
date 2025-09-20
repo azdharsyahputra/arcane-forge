@@ -3,17 +3,50 @@ import QuestLog from "../assets/components/quests/QuestLog";
 import type { QuestNode, Quest } from "../types/quest";
 import bgImage from "../assets/images/bg1.jpg";
 
+// 👉 import context
+import { useCharacterContext } from "../context/CharacterContext";
+
 interface QuestPageProps {
   node: QuestNode;
   onBack: () => void;
 }
 
 export default function QuestPage({ node, onBack }: QuestPageProps) {
+  const { character, updateCharacter } = useCharacterContext();
+
   const storageKey = `node-${node.id}-quests`;
   const [quests, setQuests] = useState<Quest[]>(() => {
     const saved = localStorage.getItem(storageKey);
     return saved ? JSON.parse(saved) : node.quests;
   });
+
+  const updateAllCharacter = () => {
+    // Ambil semua node quests dari localStorage
+    let allQuests: Quest[] = [];
+    const nodeKeys = Object.keys(localStorage).filter(
+      (key) => key.startsWith("node-") && key.endsWith("-quests")
+    );
+    nodeKeys.forEach((key) => {
+      const saved = localStorage.getItem(key);
+      if (saved) allQuests = allQuests.concat(JSON.parse(saved));
+    });
+
+    const completed = allQuests.filter((q) => q.completed).length;
+    const total = allQuests.length;
+    const expSum = allQuests
+      .filter((q) => q.completed)
+      .reduce((acc, q) => acc + (q.expReward || 0), 0);
+
+    // Update character context
+    updateCharacter({
+      ...character,
+      totalExp: expSum,
+      completedQuests: completed,
+      totalQuests: total,
+      exp: expSum % character.expToNextLevel,
+      level: Math.floor(expSum / character.expToNextLevel) + 1,
+    });
+  };
 
   const handleComplete = (id: number) => {
     setQuests((prev) => {
@@ -23,6 +56,20 @@ export default function QuestPage({ node, onBack }: QuestPageProps) {
       localStorage.setItem(storageKey, JSON.stringify(updated));
       return updated;
     });
+
+    updateAllCharacter();
+  };
+
+  const handleUndo = (id: number) => {
+    setQuests((prev) => {
+      const updated = prev.map((q) =>
+        q.id === id ? { ...q, completed: false } : q
+      );
+      localStorage.setItem(storageKey, JSON.stringify(updated));
+      return updated;
+    });
+
+    updateAllCharacter();
   };
 
   return (
@@ -43,7 +90,11 @@ export default function QuestPage({ node, onBack }: QuestPageProps) {
           {node.title}
         </h1>
 
-        <QuestLog quests={quests} onComplete={handleComplete} />
+        <QuestLog
+          quests={quests}
+          onComplete={handleComplete}
+          onUndo={handleUndo}
+        />
       </div>
     </div>
   );

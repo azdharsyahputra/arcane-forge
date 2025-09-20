@@ -1,26 +1,16 @@
-// CharacterPage.tsx
 import CharacterCard from "@/assets/components/character/CharacterCard";
-import type { Character } from "@/types/character";
-import { characterData } from "@/data/character";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Progress } from "@/assets/components/ui/progress";
-import { questNodes as questData } from "@/data/quests";
+import { useCharacterContext } from "@/context/CharacterContext";
 
-interface CharacterPageProps {
-  character: Character;
-}
+export default function CharacterPage() {
+  const { character, updateCharacter } = useCharacterContext(); // ambil semua data & updater
+  const [stars, setStars] = useState<
+    { id: number; x: number; y: number; size: number; speed: number }[]
+  >([]);
 
-export default function CharacterPage({ character }: CharacterPageProps) {
-  const [stars, setStars] = useState<{ id: number; x: number; y: number; size: number; speed: number }[]>([]);
-  const [completedQuests, setCompletedQuests] = useState(0);
-  const [totalQuests, setTotalQuests] = useState(0);
-  const [totalExp, setTotalExp] = useState(0);
-  const [level, setLevel] = useState(character.level);
-  const [expToNextLevel, setExpToNextLevel] = useState(character.expToNextLevel);
-  const [currentLevelExp, setCurrentLevelExp] = useState(0);
-
+  // Generate star particles
   useEffect(() => {
-    // Generate star particles
     const temp: typeof stars = [];
     for (let i = 0; i < 30; i++) {
       temp.push({
@@ -32,42 +22,50 @@ export default function CharacterPage({ character }: CharacterPageProps) {
       });
     }
     setStars(temp);
-
-    // Ambil data quest dari localStorage atau default
-    let allQuests: any[] = [];
-    questData.forEach((node) => {
-      const saved = localStorage.getItem(`node-${node.id}-quests`);
-      const quests = saved ? JSON.parse(saved) : node.quests;
-      allQuests = allQuests.concat(quests);
-    });
-
-    const completed = allQuests.filter(q => q.completed).length;
-    setCompletedQuests(completed);
-    setTotalQuests(allQuests.length);
-
-    const expSum = allQuests
-      .filter(q => q.completed)
-      .reduce((acc, q) => acc + (q.expReward || 0), 0);
-    setTotalExp(expSum);
-
-    // Level calculation: setiap 100 EXP = 1 level (contoh)
-    const calculatedLevel = Math.floor(expSum / 100) + 1;
-    const expForCurrentLevel = expSum % 100; // sisa EXP untuk level ini
-    setLevel(calculatedLevel);
-    setCurrentLevelExp(expForCurrentLevel);
-    setExpToNextLevel(100); // Bisa buat scaling kalau mau level tinggi EXP naik
-
   }, []);
 
-  const streak = 5;
+  // Streak logic
+  const todayStr = new Date().toDateString();
+  const lastDateStr = localStorage.getItem("lastStreakDate");
+  let diffDays = 0;
+  if (lastDateStr) {
+    const lastDate = new Date(lastDateStr);
+    diffDays = Math.floor(
+      (new Date(todayStr).getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24)
+    );
+  }
+
+  // Bisa claim kalau belum hari ini
+  const canClaimStreak = !lastDateStr || diffDays > 0;
+
+  // Claim streak function
+  const claimStreak = () => {
+    if (!canClaimStreak) return;
+
+    let newStreak = character.streak;
+    // Reset jika sudah lebih dari 2 hari
+    if (diffDays >= 3) newStreak = 0;
+    newStreak += 1;
+
+    updateCharacter({ streak: newStreak });
+    localStorage.setItem("lastStreakDate", todayStr);
+  };
+
+  // Gunakan data dari context langsung
+  const completedQuests = character.completedQuests;
+  const totalExp = character.totalExp;
+  const level = character.level;
+  const currentLevelExp = character.exp;
+  const expToNextLevel = character.expToNextLevel;
+  const streak = character.streak;
 
   const kpis = [
     {
-      label: "Daily Quests",
-      value: `${completedQuests} / ${totalQuests}`,
+      label: "Quests Completed",
+      value: `${completedQuests}`,
       icon: "🗡️",
-      subtitle: "Complete your daily challenges",
-      progress: totalQuests ? (completedQuests / totalQuests) * 100 : 0,
+      subtitle: "Total completed quests",
+      progress: 100,
     },
     {
       label: "EXP Progress",
@@ -117,7 +115,7 @@ export default function CharacterPage({ character }: CharacterPageProps) {
       <main className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
         {/* Hero Card */}
         <section>
-          <CharacterCard character={{ ...character, level, exp: totalExp }} />
+          <CharacterCard character={character} />
         </section>
 
         {/* KPI Cards */}
@@ -159,7 +157,21 @@ export default function CharacterPage({ character }: CharacterPageProps) {
               {streak} days
             </div>
 
-            <small className="text-yellow-400 text-center relative z-10">Keep your daily streak alive</small>
+            <button
+              disabled={!canClaimStreak}
+              onClick={claimStreak}
+              className={`mt-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+                canClaimStreak
+                  ? "bg-yellow-400 text-gray-900 hover:bg-yellow-500"
+                  : "bg-gray-700 text-gray-400 cursor-not-allowed"
+              }`}
+            >
+              {canClaimStreak ? "Claim Daily Streak 🔥" : "Already Claimed Today"}
+            </button>
+
+            <small className="text-yellow-400 text-center relative z-10 mt-2">
+              Keep your daily streak alive
+            </small>
           </div>
         </section>
       </main>
