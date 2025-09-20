@@ -16,5 +16,7 @@ export const characterData: Character = {
     { name: "Fireball", power: 30 },
     { name: "Ice Shield", power: 20 },
     { name: "Lightning Strike", power: 40 },
-  ]
+  ],
+  hp:100,
+  maxHp:100
 };
