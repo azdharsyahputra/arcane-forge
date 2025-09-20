@@ -3,7 +3,7 @@ import MageLv1 from '../assets/images/mage-lv1.png';
 
 export const characterData: Character = {
   id: 1,
-  name: "Ajar",
+  name: "Kaelith",
   level: 1,
   exp: 0,
   expToNextLevel: 100,
