@@ -1,8 +1,8 @@
-// types/character.ts
 export type Skill = {
   name: string;
   power: number;
 };
+
 export type Character = {
   id: number;
   name: string;
@@ -13,6 +13,7 @@ export type Character = {
   completedQuests: number; // jumlah quest yang sudah selesai
   totalQuests: number;     // total quest yang ada
   streak: number;          // daily streak
+  lastClaim?: string;      // ISO string terakhir kali streak diclaim
   avatar?: string;         // URL gambar avatar
   skills?: Skill[];        // daftar skill karakter
   maxHp?: number;          // maksimal HP
