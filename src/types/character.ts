@@ -1,3 +1,5 @@
+import type { Achievement } from "./achievement";
+
 export type Skill = {
   name: string;
   power: number;
@@ -18,4 +20,5 @@ export type Character = {
   skills?: Skill[];
   maxHp?: number;
   hp?: number; 
+  achievements: Achievement[];
 };

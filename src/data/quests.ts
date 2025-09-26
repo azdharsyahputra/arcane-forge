@@ -112,7 +112,7 @@ export const questNodes: QuestNode[] = [
   },
   {
     id: 5,
-    title: "Ruins of the Ancient",
+    title: "Ruins of Ancient",
     quests: [
       {
         id: 501,
