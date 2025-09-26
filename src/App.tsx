@@ -1,18 +1,21 @@
 import { useState, useEffect } from "react";
 import { Scroll, Sword, Trophy, MapPin, Hammer, Backpack } from "lucide-react";
+
 import QuestMap from "./pages/QuestMap";
 import QuestPage from "./pages/QuestPage";
 import QuestWorkshopPage from "./pages/QuestWorkshopPage";
 import CharacterPage from "./pages/CharacterPage";
 import InventoryPage from "./pages/InventoryPage";
+import AchievementsPage from "./pages/AchievementsPage";
+
 import type { QuestNode } from "./types/quest";
 import { inventoryData } from "./data/inventory";
+
 import arcaneLogo from "./assets/images/sidebar.png";
 import sidebarBg from "./assets/images/sidebar-bg.png";
 
-// 👉 tambahin ini
+// 👉 Context
 import { CharacterProvider } from "./context/CharacterContext";
-import AchievementsPage from "./pages/AchievementsPage";
 
 function App() {
   const [page, setPage] = useState<
@@ -23,10 +26,12 @@ function App() {
     { id: number; x: number; y: number; size: number }[]
   >([]);
 
+  // 👉 kalau ada node, langsung render QuestPage
   if (selectedNode) {
     return <QuestPage node={selectedNode} onBack={() => setSelectedNode(null)} />;
   }
 
+  // 👉 menu sidebar
   const menuItems: {
     id: "quests" | "character" | "achievements" | "questWorkshop" | "inventory";
     label: string;
@@ -39,6 +44,7 @@ function App() {
     { id: "achievements", label: "Achievements", icon: Trophy },
   ];
 
+  // 👉 efek bintang kecil di sidebar
   useEffect(() => {
     const temp: typeof particles = [];
     for (let i = 0; i < 25; i++) {
@@ -53,7 +59,6 @@ function App() {
   }, []);
 
   return (
-    // 👉 bungkus semua dengan CharacterProvider
     <CharacterProvider>
       <div className="flex h-screen overflow-hidden bg-gray-900 text-gray-200 relative">
         {/* Sidebar */}
@@ -110,9 +115,8 @@ function App() {
           {page === "quests" && <QuestMap />}
           {page === "questWorkshop" && <QuestWorkshopPage />}
           {page === "inventory" && <InventoryPage items={inventoryData} />}
-          {/* 👉 CharacterPage sekarang ga perlu prop */}
           {page === "character" && <CharacterPage />}
-          {page === "achievements" && <AchievementsPage/>}
+          {page === "achievements" && <AchievementsPage />}
         </main>
 
         <style>
