@@ -8,7 +8,6 @@
     "module": "esnext",
     "jsx": "react-jsx",
     "strict": true,
-    "ignoreDeprecations": "6.0",
     "lib": ["DOM", "ES2017", "DOM.Iterable"]  // ← tambahkan ini
   },
   "include": ["src"]
