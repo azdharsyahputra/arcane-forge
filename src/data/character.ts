@@ -7,10 +7,10 @@ export const characterData: Character = {
   level: 1,
   exp: 0,
   expToNextLevel: 100,
-  totalExp: 0,           // total akumulatif EXP
-  completedQuests: 0,    // quest yang sudah selesai
-  totalQuests: 2,        // total quest yang ada (contoh)
-  streak: 0,             // daily streak
+  totalExp: 0,
+  completedQuests: 0,
+  totalQuests: 2,
+  streak: 0,
   avatar: MageLv1,
   skills: [
     { name: "Fireball", power: 30 },
@@ -18,5 +18,6 @@ export const characterData: Character = {
     { name: "Lightning Strike", power: 40 },
   ],
   hp:100,
-  maxHp:100
+  maxHp:100,
+achievements: []
 };

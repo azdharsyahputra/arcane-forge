@@ -12,6 +12,7 @@ import sidebarBg from "./assets/images/sidebar-bg.png";
 
 // 👉 tambahin ini
 import { CharacterProvider } from "./context/CharacterContext";
+import AchievementsPage from "./pages/AchievementsPage";
 
 function App() {
   const [page, setPage] = useState<
@@ -111,11 +112,7 @@ function App() {
           {page === "inventory" && <InventoryPage items={inventoryData} />}
           {/* 👉 CharacterPage sekarang ga perlu prop */}
           {page === "character" && <CharacterPage />}
-          {page === "achievements" && (
-            <div className="p-10 text-center text-2xl font-bold">
-              🏆 Achievements
-            </div>
-          )}
+          {page === "achievements" && <AchievementsPage/>}
         </main>
 
         <style>
