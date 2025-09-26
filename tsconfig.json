@@ -9,7 +9,8 @@
     "jsx": "react-jsx",
     "strict": true,
     "lib": ["DOM", "ES2017", "DOM.Iterable"],
-    "types": ["react", "react-dom"]
+    "types": ["react", "react-dom"],
+    "outDir": "dist"
   },
   "include": ["src"]
 }
