@@ -61,7 +61,7 @@ Game ini menggabungkan elemen **quest system, character progression, inventory, 
 
 ## 🎮 Demo
 
-🚧 Coming soon (Vercel deployment link) 🚧
+[Arcane Forge Live](https://arcane-forge-rpg.vercel.app/)
 
 ---
 
