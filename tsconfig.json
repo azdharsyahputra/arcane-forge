@@ -5,12 +5,14 @@
       "@/*": ["*"]
     },
     "moduleResolution": "bundler",
-    "module": "esnext",
+    "module": "ESNext",
     "jsx": "react-jsx",
     "strict": true,
-    "lib": ["DOM", "ES2017", "DOM.Iterable"],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "types": ["react", "react-dom"],
-    "outDir": "dist"
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["src"]
 }
